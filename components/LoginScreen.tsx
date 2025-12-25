@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Button, 
   Input, 
@@ -34,6 +33,19 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   const [selectedTab, setSelectedTab] = useState<any>("login");
   const [isVisible, setIsVisible] = useState(false);
   
+  // --- THIS IS THE NEW LOGIC YOU ADDED (It is correct!) ---
+  const [randomHex, setRandomHex] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Generates the random numbers only on the client side
+    setRandomHex(
+      Array.from({ length: 10 }).map(() => 
+        Math.random().toString(16).slice(2, 10).toUpperCase()
+      )
+    );
+  }, []);
+  // -------------------------------------------------------
+
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   // Disclosure for the Manual Override / Info Modal
@@ -122,9 +134,15 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-full overflow-hidden bg-[#020617] cyber-grid relative px-4">
       <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+        
+        {/* --- THIS IS THE PART WE FIXED IN THE VISUALS --- */}
         <div className="absolute top-[10%] left-[5%] text-[8px] font-mono text-primary/40 leading-none">
-          {Array.from({length: 10}).map((_, i) => <div key={i}>0x{Math.random().toString(16).slice(2, 10).toUpperCase()} >> SYNCING_NODE_{i}</div>)}
+          {randomHex.map((hex, i) => (
+            <div key={i}>0x{hex} &gt;&gt; SYNCING_NODE_{i}</div>
+          ))}
         </div>
+        {/* ----------------------------------------------- */}
+
         <div className="absolute bottom-[10%] right-[5%] text-[8px] font-mono text-primary/40 text-right leading-none">
           {Array.from({length: 10}).map((_, i) => <div key={i}>BATTLE_LOG_STREAM :: SESSION_INIT_{i}</div>)}
         </div>
