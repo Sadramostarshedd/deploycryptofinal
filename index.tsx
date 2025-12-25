@@ -1,4 +1,4 @@
-
+import './index.css'; // <--- Add this line at the top!
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HeroUIProvider } from "@heroui/react";
